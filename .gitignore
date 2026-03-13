@@ -1,0 +1,9 @@
+mondashenv/
+__pycache__/
+*.pyc
+etc/
+Include/
+Lib/
+Scripts/
+share/
+pyenv.cfg
