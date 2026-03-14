@@ -245,15 +245,20 @@ class Validator:
             # If a mapping is not found, it means the User column is unmapped and therefore
             # that column can be dropped
             if not mondash_col_name:
-                cols_to_drop.append(cols_to_drop)
+                cols_to_drop.append(column_name)
         validated_df.drop(cols_to_drop, axis="columns", inplace=True)
 
         # Rename columns to mondash column names
-        validated_df.columns = self.schema.column_names
+        rename_map = {
+            self.mapping.get_user_col(mondash_col): mondash_col
+            for mondash_col in self.schema.column_names
+        }
+        validated_df.rename(columns=rename_map, inplace=True)
 
         # Add helper columns
         validated_df["day"] = validated_df["purchased_date"].dt.day
         validated_df["month"] = validated_df["purchased_date"].dt.month
-        validated_df["year"] = validated_df["purchased_time"].dt.year
+        validated_df["year"] = validated_df["purchased_date"].dt.year
+        validated_df["hour"] = validated_df["purchased_time"].dt.hour
 
         return validated_df
