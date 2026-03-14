@@ -64,6 +64,14 @@ class ColumnMapping:
     """
     # model_column (key) -> user_column (value)
     model_to_user: dict[str, str]
+    user_to_model: dict[str, str] = field(default_factory=dict, init=False, repr=False)
+
+    def __post_init__(self):
+        object.__setattr__(
+            self,
+            "user_to_model",
+            {v: k for k, v in self.model_to_user.items()}
+        )
 
     def get_user_col(self, model_column: str) -> str:
         """Returns name of the column as it appears in the User's CSV.
@@ -75,6 +83,17 @@ class ColumnMapping:
             str: Name of Column in User's CSV.
         """
         return self.model_to_user[model_column]
+    
+    def get_model_col(self, user_column: str) -> str | None:
+        """Returns name of the mondash column mapped to the given user column.
+
+        Args:
+            user_column (str): Name of the column from user's CSV.
+        
+        Returns:
+            str: Name of the mapped mondash column or `None` if user column is not mapped to a mondash column.
+        """
+        return self.user_to_model.get(user_column)
 
 @dataclass(frozen=True)
 class ValidationIssue:

@@ -31,7 +31,7 @@ def coerce_time(column: pd.Series) -> pd.Series:
     Args:
         column (pd.Series): A Column from a pandas Dataframe which need to be corrected. This should be a column containing values of type date, datetime or str.
     """
-    return pd.to_datetime("2026-01-01" + column.astype(str), errors="coerce")
+    return pd.to_datetime(column, format="%H:%M", errors="coerce")
     
 def coerce_float(column: pd.Series) -> pd.Series:
     """Fixes problems with the price mondash column or the weight mondash column.
@@ -225,3 +225,35 @@ class Validator:
             self._check_type(coerced_df[user_col_name], mondash_col, user_col_name, report)
         
         return report, coerced_df
+
+    def post_validation(self, validated_df: pd.DataFrame) -> pd.DataFrame:
+        """Perform additional post-validation steps.
+
+        This method renames column names of the User's CSV (validated) to mondash schema's column names.
+        It also adds helper columns like day, month, year and hour.
+
+        Args:
+            validated_df (pd.Dataframe): A validated df (output of Validator.validate). 
+        
+        Returns:
+            pd.Dataframe: A dataframe with added helper columns and renamed column names.
+        """
+        # Drop unmapped columns
+        cols_to_drop = []
+        for column_name in validated_df.columns:
+            mondash_col_name = self.mapping.get_model_col(column_name)
+            # If a mapping is not found, it means the User column is unmapped and therefore
+            # that column can be dropped
+            if not mondash_col_name:
+                cols_to_drop.append(cols_to_drop)
+        validated_df.drop(cols_to_drop, axis="columns", inplace=True)
+
+        # Rename columns to mondash column names
+        validated_df.columns = self.schema.column_names
+
+        # Add helper columns
+        validated_df["day"] = validated_df["purchased_date"].dt.day
+        validated_df["month"] = validated_df["purchased_date"].dt.month
+        validated_df["year"] = validated_df["purchased_time"].dt.year
+
+        return validated_df

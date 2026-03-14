@@ -22,5 +22,6 @@ with st.container(horizontal_alignment="center"):
     elif isinstance(df, pd.DataFrame) and df.empty:
         st.info("The uploaded CSV has no rows.", icon=":material/info:")
     else:
-        st.dataframe(data=df.set_index(pd.RangeIndex(start=1, stop=len(df)+1)))
+        selective_df = df[state.dataset.schema.column_names]
+        st.dataframe(data=selective_df.set_index(pd.RangeIndex(start=1, stop=len(df)+1)))
         delete_data = st.button(label="Delete Data", icon=":material/delete:", on_click=delete_data)
