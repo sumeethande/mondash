@@ -71,8 +71,6 @@ def save_callback() -> None:
         time.sleep(0.7)
         
         # Validation has failed
-        st.write(cleaned_df)
-        st.write(state.dataset.mapping)
         if not report.is_successful:
             status.update(label="Validation Failed", expanded=True, state="error")
             for issue in report.issues:
