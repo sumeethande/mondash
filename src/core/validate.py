@@ -260,5 +260,6 @@ class Validator:
         validated_df["month"] = validated_df["purchased_date"].dt.month
         validated_df["year"] = validated_df["purchased_date"].dt.year
         validated_df["hour"] = validated_df["purchased_time"].dt.hour
+        validated_df["week"] = validated_df["purchased_date"].dt.isocalendar().week
 
         return validated_df

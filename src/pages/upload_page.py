@@ -77,9 +77,13 @@ def save_callback() -> None:
                 st.error(f":red[{issue.error.err_text}]: {issue.error_details}", icon=":material/error:")
             
         else:
-            status.update(label="Validation Successful", expanded=True, state="complete")
+            status.update(label="Validation Successful", expanded=False, state="running")
+            time.sleep(0.2)
+            status.update(label="Running post-validation", expanded=False, state="running")
             final_df = validator.post_validation(cleaned_df)
+            time.sleep(0.7)
             state.dataset.model_df = final_df
+            status.update(label="Validation Successful", expanded=True, state="complete")
             st.success("Validation is complete! You can now view dashboards", icon=":material/check:")
         
 
