@@ -28,12 +28,12 @@ def _build_schema() -> MondashSchema:
         MondashColumn("purchased_time", (time, str), False, coerce_time),
         MondashColumn("product", (str,), False),
         MondashColumn("category", (str,), False),
-        MondashColumn("sub-category", (str,), False),
+        MondashColumn("sub_category", (str,), False),
         MondashColumn("shop", (str,), False),
         MondashColumn("quantity", (int, float), True, coerce_int),
         MondashColumn("weight", (int, float), True, coerce_float),
         MondashColumn("price", (float,), False, coerce_float),
-        MondashColumn("is_essentail", (bool,), False, coerce_bool)
+        MondashColumn("is_essential", (bool,), False, coerce_bool)
     ))
 
 def get_state() -> AppState:

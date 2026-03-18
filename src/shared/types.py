@@ -1,4 +1,14 @@
+import os
 from enum import Enum, auto
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class Env(Enum):
+    DEV = "dev"
+    PROD = "prod"
+
+MONDASH_ENV = Env(os.getenv("MONDASH_ENV", "prod"))
 
 class DashboardState(Enum):
 
