@@ -142,8 +142,8 @@ def compute_spend_trend(df: pd.DataFrame, month: int, year: int) -> pd.DataFrame
 
     return filtered_df.groupby("day", as_index=False)["price"].sum()
 
-def compute_category_bar(df: pd.DataFrame, month: int, year: int) -> pd.DataFrame:
-    """Computes data required for plotting the category comparison bar graph.
+def compute_day_spending_bar(df: pd.DataFrame, month: int, year: int) -> pd.DataFrame:
+    """Computes data required for plotting the spending by day of the week bar graph.
 
     Args:
         df (pd.Dataframe): Input dataframe
@@ -154,6 +154,9 @@ def compute_category_bar(df: pd.DataFrame, month: int, year: int) -> pd.DataFram
         pd.Dataframe: A Dataframe containing data to plot the bar graph.    
     """
 
+    weekday_order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     filtered_df = df[(df["month"] == month) & (df["year"] == year)]
 
-    return filtered_df.groupby("sub_category", as_index=False)["price"].sum()
+    filtered_df["day_name"] = pd.Categorical(filtered_df["day_name"], categories=weekday_order, ordered=True)
+
+    return filtered_df.groupby("day_name", as_index=False)["price"].sum().sort_values("day_name")

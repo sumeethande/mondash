@@ -256,6 +256,7 @@ class Validator:
         validated_df.rename(columns=rename_map, inplace=True)
 
         # Add helper columns
+        validated_df["day_name"] = validated_df["purchased_date"].dt.day_name()
         validated_df["day"] = validated_df["purchased_date"].dt.day
         validated_df["month"] = validated_df["purchased_date"].dt.month
         validated_df["year"] = validated_df["purchased_date"].dt.year

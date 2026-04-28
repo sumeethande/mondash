@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from state import get_state
-from dashboard.compute import compute_overview_kpis, compute_spend_trend, compute_category_bar
+from dashboard.compute import compute_overview_kpis, compute_spend_trend, compute_day_spending_bar
 
 st.set_page_config(
     page_title="Overview Dashboard",
@@ -111,14 +111,14 @@ else:
                 y_label="Money Spend (€)"
             )
         
-        bar_graph_data = compute_category_bar(state.dataset.model_df, month=month, year=year)
+        bar_graph_data = compute_day_spending_bar(state.dataset.model_df, month=month, year=year)
 
         with right_col:
-            st.text(f"Sub-Category breakdown for month {month}", width="stretch", text_alignment="center")
+            st.text(f"Spending by Day of the week for month {month}", width="stretch", text_alignment="center")
             st.bar_chart(
                 data=bar_graph_data,
-                x="sub_category",
-                x_label="Sub-Category",
+                x="day_name",
+                x_label="Week Day",
                 y="price",
                 y_label="Money Spend (€)"
             )
