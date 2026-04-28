@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 from state import get_state
-from dashboard.compute import compute_overview_kpis, compute_spend_trend, compute_day_spending_bar
+from dashboard.compute import compute_overview_kpis, compute_spend_trend, compute_day_spending_bar, compute_heatmap
+import plotly.express as px
 
 st.set_page_config(
     page_title="Overview Dashboard",
@@ -122,3 +123,32 @@ else:
                 y="price",
                 y_label="Money Spend (€)"
             )
+    
+    with st.container(horizontal_alignment="center"):
+
+        heatmap_data = compute_heatmap(df=state.dataset.model_df, month=month, year=year)
+
+        figure = px.imshow(
+                    heatmap_data,
+                    labels=dict(x="Day of Week", y="Sub-category", color="Avg Spend (€)"),
+                    color_continuous_scale="Oranges",
+                    aspect="auto"
+                )
+        
+        figure.update_traces(
+                hovertemplate="Day: %{x}<br>Category: %{y}<br>Avg Spend: €%{z:.2f}<extra></extra>",
+                xgap=1,
+                ygap=1
+            )
+        
+        figure.update_layout(
+                xaxis_title="Day of Week",
+                yaxis_title="Sub-category",
+                coloraxis_colorbar=dict(title="Avg Spend (€)"),
+                paper_bgcolor="#1a1a2e",   # outer background
+                plot_bgcolor="#1a1a2e",    # inner background
+                font=dict(color="white"), 
+            )
+
+        st.text(f"Avg. Spend top 6 sub-categories & Day of the week for month {month}", width="content", text_alignment="center")
+        st.plotly_chart(figure, width="content")
