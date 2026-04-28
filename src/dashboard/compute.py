@@ -125,3 +125,35 @@ def compute_overview_kpis(df: pd.DataFrame, month: int, year: int) -> tuple[Over
             no_of_trips.delta = no_of_trips.current - no_of_trips.previous
     
     return (expense, essentials, basket_size, avg_weekly_ex, no_of_trips)
+
+def compute_spend_trend(df: pd.DataFrame, month: int, year: int) -> pd.DataFrame:
+    """Computes data required for plotting expense trend over a period.
+
+    Args:
+        df (pd.Dataframe): Input dataframe
+        month (int): Month filter for which calculations are made.
+        year (int): Year filter for which calculations are made.
+
+    Returns:
+        pd.Dataframe: A Dataframe containing data to plot the line graph.
+    """
+
+    filtered_df = df[(df["month"] == month) & (df["year"] == year)]
+
+    return filtered_df.groupby("day", as_index=False)["price"].sum()
+
+def compute_category_bar(df: pd.DataFrame, month: int, year: int) -> pd.DataFrame:
+    """Computes data required for plotting the category comparison bar graph.
+
+    Args:
+        df (pd.Dataframe): Input dataframe
+        month (int): Month filter for which calculations are made.
+        year (int): Year filter for which calculations are made.
+
+    Returns:
+        pd.Dataframe: A Dataframe containing data to plot the bar graph.    
+    """
+
+    filtered_df = df[(df["month"] == month) & (df["year"] == year)]
+
+    return filtered_df.groupby("sub_category", as_index=False)["price"].sum()
