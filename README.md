@@ -43,7 +43,7 @@
 
 #### Screenshots: 🖼️
 
-![Overview Dashboard SS 1](src\images\overview_dashboard_ss_1.png)
+![Overview Dashboard SS 1](/src/images/overview_dashboard_ss_1.png)
 
 
-![Overview Dashboard SS 2](src\images\overview_dashboard_ss_2.png)
+![Overview Dashboard SS 2](/src/images/overview_dashboard_ss_2.png)
