@@ -4,6 +4,8 @@ import pandas as pd
 from state.state_handler import get_state
 from core.schema import ColumnMapping
 from core.validate import Validator
+from core.utils import get_default_dev_mode_col_mapping
+from shared.types import MONDASH_ENV, Env
 
 st.set_page_config(
     page_title="Upload Data",
@@ -41,9 +43,13 @@ def get_column_mapping() -> ColumnMapping:
         ColumnMapping: An object of type ColumnMapping.
     """
     mapping_dict = {}
-    for key, value in st.session_state.items():
-        if isinstance(value, str) and value in state.dataset.schema.column_names:
-            mapping_dict[value] = key
+
+    if MONDASH_ENV == Env.PROD:
+        for key, value in st.session_state.items():
+            if isinstance(value, str) and value in state.dataset.schema.column_names:
+                mapping_dict[value] = key
+    else:
+        return ColumnMapping(get_default_dev_mode_col_mapping())
     
     return ColumnMapping(mapping_dict)
 
@@ -176,5 +182,8 @@ with st.container(border=False, key="upload_page_main_container"):
             )
     
     if data:
-        column_mapper()
+        if MONDASH_ENV == Env.PROD:
+            column_mapper()
+        else:
+            save_callback()
 
