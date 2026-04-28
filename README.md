@@ -16,26 +16,34 @@
 1) **Total spendings:**  
    Total money spent with a delta metric indicating the percent increase or decrease as compared to previous month.
    
-2) **Top 3 sub-categories by spending:**  
-   Names of top 3 sub-categories which account to the most spendings.
+2) **% Essentials:**  
+   Percentage of the total spendings spent on Essential products.
    
-3) **Essentials vs Non-essentails % ratio:**  
-   % of spendings on Essentails and Non-essentials.
-
-4) **Basket Size:**  
+3) **Avg Basket Size**  
    Average spending per trip.
 
-5) **Avg. weekly spendings:**  
+4) **Avg. weekly spendings:**  
    Average money spend per week.
+
+5) **Total Trips:**
+   Total trips made to shops in the given period.
 
 
 #### Graphs: 📊📉
 
 1) **Spend Trend line:**  
-   Spending totals plotted over the selected peroid in a line chart with optional sub-category breakdown (one line for each sub-category in the sub-category breakdown option).
+   Spending totals plotted over the selected peroid in a line chart.
 
-2) **Sub-category heatmap:**  
-   Sub-categories plotted in a heatmap to study trends over a period.
+2) **Spending by day of the week:**  
+   Bar chart for studying spending trends by day of the week.
 
-3) **Spending by day of the week:**  
-   Bar chart for studying spending trends by day of the week. 
+3) **Sub-category heatmap:**  
+   Top 6 Sub-categories plotted in a heatmap to study spending trends over a period sub-categorywise.
+
+
+#### Screenshots: 🖼️
+
+![Overview Dashboard SS 1](src\images\overview_dashboard_ss_1.png)
+
+
+![Overview Dashboard SS 2](src\images\overview_dashboard_ss_2.png)
