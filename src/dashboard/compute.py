@@ -39,7 +39,7 @@ def compute_overview_kpis(df: pd.DataFrame, month: int, year: int) -> tuple[Over
         essentials_true = (df["month"] == month) & (df["year"] == year) & (df["is_essential"] == True)
         essentials_false = (df["month"] == month) & (df["year"] == year) & (df["is_essential"] == False)
         previous_exists = ((df["month"] == month - 1) & (df["year"] == year)).any()
-        previous_exists_condition = (df["year"] == year - 1) & (df["month"] == 12)
+        previous_exists_condition = (df["year"] == year) & (df["month"] == month - 1)
 
     # Compute CURRENT
     # 1. Compute Total Spendings
@@ -62,24 +62,29 @@ def compute_overview_kpis(df: pd.DataFrame, month: int, year: int) -> tuple[Over
     # Data from December of previous year exists then,
     if previous_exists:
 
+        sub_df = df[previous_exists_condition]
+
         # 1. Compute PREVIOUS and DELTA Total Spendings
-        expense.previous = round(df[previous_exists_condition]["price"].sum(), 2)
+        expense.previous = round(sub_df["price"].sum(), 2)
         expense.delta = round(expense.current - expense.previous, 2)
 
         # 2. Compute PREVIOUS and CURRENT % Essentials vs Non-Essentials
-        essentials.previous = round(df[previous_exists_condition & essentials_true]["is_essential"].count() / ( (df[(df["year"] == year - 1)&(df["month"] == 12)&(df["is_essential"]==True)]["is_essential"].count() + df[(df["year"] == year - 1)&(df["month"] == 12)&(df["is_essential"]==False)]["is_essential"].count()) ) * 100 ,2)
+
+        essentials_prev_true_count = sub_df[sub_df["is_essential"] == True]["is_essential"].count()
+        essentials_prev_false_count = sub_df[sub_df["is_essential"] == False]["is_essential"].count()
+        essentials.previous = round( (essentials_prev_true_count / (essentials_prev_true_count + essentials_prev_false_count)) * 100 ,2)
         essentials.delta = round(essentials.current - essentials.previous, 2)
 
         # 3. Compute PREVIOUS Avg. Basket Size
-        basket_size.previous = round(df[previous_exists_condition].groupby("basket_id")["price"].sum().mean(),2)
+        basket_size.previous = round(sub_df.groupby("basket_id")["price"].sum().mean(),2)
         basket_size.delta = round(basket_size.current - basket_size.previous,2)
 
         # 4. Computer PREVIOUS Avg. Weekly Spendings
-        avg_weekly_ex.previous = round(df[previous_exists_condition].groupby("week")["price"].sum().mean(),2)
+        avg_weekly_ex.previous = round(sub_df.groupby("week")["price"].sum().mean(),2)
         avg_weekly_ex.delta = round(avg_weekly_ex.current - avg_weekly_ex.previous, 2)
 
         # 5. Compute PREVIOUS Total no. of trips
-        no_of_trips.previous = len(df[previous_exists_condition]["basket_id"].unique())
+        no_of_trips.previous = len(sub_df["basket_id"].unique())
         no_of_trips.delta = no_of_trips.current - no_of_trips.previous
 
     return (expense, essentials, basket_size, avg_weekly_ex, no_of_trips)
