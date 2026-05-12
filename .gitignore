@@ -1,10 +1,15 @@
+.mondashenv/
 mondashenv/
 __pycache__/
 *.pyc
+bin/
 etc/
 Include/
 Lib/
+lib/
+lib64/
 Scripts/
 share/
 pyenv.cfg
+pyvenv.cfg
 *.env
